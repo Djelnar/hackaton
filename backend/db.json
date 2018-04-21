@@ -1,0 +1,129 @@
+{
+  "localEvents": [
+    {
+      "id": "1",
+      "eventName": "ST-School English course",
+      "description": "Moscow english school",
+      "link": "https://vk.com/ct_school",
+      "type": "course",
+      "participants": [
+        3,
+        4
+      ],
+      "place": "55.747643, 37.609512"
+    }
+  ],
+  "crowdEvents": [
+    {
+      "id": 1,
+      "eventName": "Dinamo – Rubin play",
+      "description": "Soccer match at Khimki arena",
+      "link": "http://belet.ru/239-futbol-dinamo-rubin.html",
+      "type": "sport",
+      "date": "2018-04-30T14:00:00",
+      "participants": [
+        1,
+        2
+      ],
+      "place": "55.8853158,37.454415"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Ann",
+      "interests": [
+        "skateboarding",
+        "drawing",
+        "it"
+      ],
+      "alsoPlansTo": {
+        "local": [
+          1
+        ],
+        "crowd": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "name": "Sasha",
+      "interests": [
+        "politics",
+        "cars",
+        "arts"
+      ],
+      "alsoPlansTo": {
+        "local": [
+          1
+        ],
+        "crowd": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "name": 893242343,
+      "interests": [
+        "you",
+        "have",
+        "some",
+        "interests"
+      ],
+      "id": 3
+    },
+    {
+      "name": 893242343,
+      "interests": [
+        "you",
+        "have",
+        "some",
+        "interests"
+      ],
+      "id": 4
+    },
+    {
+      "name": 893242343,
+      "interests": [
+        "you",
+        "have",
+        "some",
+        "interests"
+      ],
+      "id": 5
+    },
+    {
+      "name": 8932420343,
+      "interests": [
+        "you",
+        "have",
+        "some",
+        "interests"
+      ],
+      "id": 6
+    },
+    {
+      "name": 89324203403,
+      "interests": [
+        "you",
+        "have",
+        "some",
+        "interests"
+      ],
+      "id": 7
+    },
+    {
+      "name": 89324203403,
+      "interests": [
+        "you",
+        "have",
+        "some",
+        "interests"
+      ],
+      "id": 8
+    }
+  ]
+}
