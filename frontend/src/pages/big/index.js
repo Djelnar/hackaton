@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { Heading } from 'rebass';
 import generate from 'string-to-color';
 import withRouter from 'react-router-dom/withRouter';
+import axios from 'axios'
 
 
 export const Page = styled.div`
@@ -164,24 +165,41 @@ class BigRaw extends Component {
   }
 
   componentDidMount() {
+    axios('http://localhost:3010/crowdEvents')
+      .then(({data}) => {
+        this.setState({
+          allEvents: data,
+          events: data
+          // events: [
+          //   {
+          //     "id": 1,
+          //     "eventName": "Dinamo – Rubin play",
+          //     "description": "Soccer match at Khimki arena",
+          //     "link": "http://belet.ru/239-futbol-dinamo-rubin.html",
+          //     "type": "sport",
+          //     "date": "2018-04-30T14:00:00",
+          //     "participants": [
+          //       1, 2
+          //     ],
+          //     "place": "55.8853158,37.454415"
+          //   }
+          // ]
+        })
+
+      })
+      .catch((e) => console.log(e))
+  }
+  inputHandler = (e) => {
+    if(e.target.value.length < 1){
+      this.setState({
+        events: this.state.allEvents
+      })  
+    }
+    let events = this.state.allEvents.filter((event) => event.eventName.toLowerCase().includes(e.target.value.toLowerCase()))
     this.setState({
-      events: [
-        {
-          "id": 1,
-          "eventName": "Dinamo – Rubin play",
-          "description": "Soccer match at Khimki arena",
-          "link": "http://belet.ru/239-futbol-dinamo-rubin.html",
-          "type": "sport",
-          "date": "2018-04-30T14:00:00",
-          "participants": [
-            1, 2
-          ],
-          "place": "55.8853158,37.454415"
-        }
-      ]
+      events
     })
   }
-
   render() {
     const { transform, events } = this.state
 
@@ -200,10 +218,11 @@ class BigRaw extends Component {
               placeholder='Search an event'
               onFocus={this.focusHandler}
               onBlur={this.blurHandler}
+              onChange={this.inputHandler}
             />
             <div
               className='blacc'
-            >tap to search</div>
+            >tap to see the results</div>
           </InputWrap>
           {
             events.length && events.map(({ eventName, link, type, date, participants, id }) => (
@@ -214,11 +233,11 @@ class BigRaw extends Component {
                   href={link}
                 >{eventName}</EventName>
                 <EventDate>{date}</EventDate>
-                <EventParticipants>{participants.length} participants</EventParticipants>
+                {/* <EventParticipants>{participants.length} participants</EventParticipants> */}
                 <EventType>{type}</EventType>
                 <EventClick
                   onClick={() => history.push('/bigevent/' + id)}
-                >GO</EventClick>
+                >Details</EventClick>
               </EventCard>
             ))
           }

@@ -27,7 +27,7 @@ const Container = styled.div`
 const Horizontal = styled.div`
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   margin-bottom: 24px;
 `
 

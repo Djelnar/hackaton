@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { Page, Container } from './';
 import { Heading, Text, Link, Tabs, Tab } from 'rebass';
-
+import axios from 'axios'
 
 const BIG = {
   "id": 1,
@@ -46,25 +46,52 @@ export class BigPage extends Component {
       tab,
     })
   }
+  componentDidMount = () => {
+    axios(`http://localhost:3010/crowdEvents/${this.props.id}`)
+      .then(({data}) => {
+        let {eventName,
+          description,
+          image,
+          link,
+          date,
+          place,
+          type} = data
+        this.setState({
+          eventName,
+          description,
+          image,
+          link,
+          date,
+          place,
+          type
+        })
+
+      })
+      .catch((e) => console.log(e))
+  }
 
   render() {
     const { id } = this.props
 
-    const { tab } = this.state
+    const { tab, eventName, image,
+      description,
+      link,
+      date,
+      place,
+      type } = this.state
 
     return (
       <Page>
         <Container>
           <DescCont>
             <Img>
-              <img src='https://pp.userapi.com/c837229/v837229998/63bce/U6LZXTT_LVg.jpg' />
+              <img src={image} />
             </Img>
             <div>
-              <Heading fontSize={3}>{BIG.eventName}</Heading>
+              <Heading fontSize={3}>{eventName}</Heading>
               <Text
                 mt={10}
-                textAlign='left'
-              >{BIG.date}</Text>
+              >{date}</Text>
             </div>
           </DescCont>
           <Tabs
@@ -89,33 +116,29 @@ export class BigPage extends Component {
               <Fragment>
                 <Text
                   mt={16}
-                  textAlign='left'
                   fontSize={3}
                   style={{
                     width: '100%'
                   }}
                 >
-                  {BIG.description}
+                  {description}
                 </Text>
                 <Text
                   style={{
                     width: '100%'
                   }}
                   mt={8}
-                  textAlign='left'
                 >
                   <Link
-                    href={BIG.link}
-                    textAlign='left'
-                  >Link</Link>
+                    href={link}
+                  >Event link</Link>
                 </Text>
-                <Text
+                {/* <Text
                   style={{
                     width: '100%'
                   }}
                   mt={8}
-                  textAlign='left'
-                >Type: {BIG.type}</Text>
+                >Type: {type}</Text> */}
               </Fragment>
             )
           }
