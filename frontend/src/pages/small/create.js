@@ -5,9 +5,9 @@ import { Page, Container } from './';
 import { Heading } from 'rebass';
 import Axios from 'axios';
 
-const AppID = 'Z7985VNjS9rA6QPPIBcY'
+export const AppID = 'Z7985VNjS9rA6QPPIBcY'
 
-const AppCode = '74m9Tb-4Wf4iNmwtxzOZSg'
+export const AppCode = '74m9Tb-4Wf4iNmwtxzOZSg'
 
 export const SHeading = Heading.extend`
   margin-top: 46px;

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { Heading } from 'rebass';
-import generate from 'string-to-color';
 import withRouter from 'react-router-dom/withRouter';
 import axios from 'axios'
+import { EventCard } from './eventCard';
 
 
 export const Page = styled.div`
@@ -81,71 +81,6 @@ const InputWrap = styled.div`
   `}
 `;
 
-const EventCard = styled.div`
-  border-radius: 4px;
-  background-color: #fff;
-  padding: 8px;
-  width: calc(100%);
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 16px;
-  box-shadow: 1px 1px 11px 0px rgba(127,127,127,0.75);
-`
-
-const EventName = styled.a`
-  color: #000000;
-  display: block;
-  margin-bottom: 4px;
-`
-
-const EventDate = styled.div`
-  margin-bottom: 4px;
-  white-space: nowrap;
-`
-const EventType = styled.span`
-  background-color: ${(p) => generate(p.children)};
-  padding: 4px 8px;
-  border-radius: 100px;
-  margin-left: 8px;
-  white-space: nowrap;
-  z-index: 1;
-
-  &:first-of-type {
-    margin-left: 0;
-  }
-
-  &:after {
-    /* content: ''; */
-    position: absolute;
-    left: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10px;
-    height: 10px;
-    border-radius: 20px;
-    background-color: #ffffff;
-  }
-`
-
-const EventParticipants = styled.p`
-  margin-top: 4px;
-  margin-bottom: 8px;
-`
-
-const EventClick = styled.div`
-  border-radius: 0 0 4px 4px;
-  display: flex;
-  justify-content: center;
-  width: calc(100% + 16px);
-  padding: 8px 0;
-  text-align: center;
-  color: #ffffff;
-  margin-top: 8px;
-  margin-left: -8px;
-  margin-bottom: -8px;
-  background-color: fuchsia;
-`
-
 class BigRaw extends Component {
   state = {
     transform: 0,
@@ -167,7 +102,7 @@ class BigRaw extends Component {
 
   componentDidMount() {
     axios(`http://${window.location.hostname}:3010/crowdEvents`)
-      .then(({data}) => {
+      .then(({ data }) => {
         this.setState({
           allEvents: data,
           events: data
@@ -191,10 +126,10 @@ class BigRaw extends Component {
       .catch((e) => console.log(e))
   }
   inputHandler = (e) => {
-    if(e.target.value.length < 1){
+    if (e.target.value.length < 1) {
       this.setState({
         events: this.state.allEvents
-      })  
+      })
     }
     let events = this.state.allEvents.filter((event) => event.eventName.toLowerCase().includes(e.target.value.toLowerCase()))
     this.setState({
@@ -224,20 +159,11 @@ class BigRaw extends Component {
             >tap to see the results</div>
           </InputWrap>
           {
-            events.length ? events.map(({ eventName, link, type, date, participants, id }) => (
+            events.length ? events.map((evt) => (
               <EventCard
-                key={id}
-              >
-                <EventName
-                  href={link}
-                >{eventName}</EventName>
-                <EventDate>{new Intl.DateTimeFormat('ru').format(date)}</EventDate>
-                {/* <EventParticipants>{participants.length} participants</EventParticipants> */}
-                <EventType>{type}</EventType>
-                <EventClick
-                  onClick={() => history.push('/bigevent/' + id)}
-                >Details</EventClick>
-              </EventCard>
+                key={evt.id}
+                {...evt}
+              />
             )) : null
           }
         </Container>

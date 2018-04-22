@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Page, Container } from './';
 import { Heading, Text, Link, Tabs, Tab } from 'rebass';
 import axios from 'axios'
+import { AppID, AppCode } from '../small/create';
 
 
 const DescCont = styled.div`
@@ -36,14 +37,14 @@ export class BigPage extends Component {
   }
   componentDidMount = () => {
     axios(`http://${window.location.hostname}:3010/crowdEvents/${this.props.id}`)
-      .then(({data}) => {
-        let {eventName,
+      .then(({ data }) => {
+        let { eventName,
           description,
           image,
           link,
           date,
           place,
-          type} = data
+          type } = data
         this.setState({
           eventName,
           description,
@@ -53,9 +54,9 @@ export class BigPage extends Component {
           place,
           type
         })
-
       })
       .catch((e) => console.log(e))
+
   }
 
   render() {
@@ -65,8 +66,10 @@ export class BigPage extends Component {
       description,
       link,
       date,
-      place,
+      place = '',
       type } = this.state
+
+    const [lng, lat] = place.split(',')
 
     return (
       <Page>
@@ -131,6 +134,57 @@ export class BigPage extends Component {
               </Fragment>
             )
           }
+          {
+            tab === 'partc' && (
+              <Fragment>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia',
+                    width: '100%'
+                  }}
+                >
+                  <Text
+                    color='#fff'
+                    fontSize={4}
+                    textAlign='left'
+                  >Sheldur</Text></div>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia',
+                    width: '100%'
+                  }}
+                >
+                  <Text
+                    color='#fff'
+                    fontSize={4}
+                    textAlign='left'
+                  >Bohdan</Text></div>
+              </Fragment>
+            )
+          }
+          <div id='mapContainer' style={{
+            display: tab === 'map' ? 'block' : 'none',
+            height: 300,
+            width: 300,
+            backgroundColor: '#ffffff',
+            marginTop: 24
+          }}>
+            <img style={{
+              display: 'block',
+              width: '100%'
+            }}
+              src={'https://image.maps.cit.api.here.com/mia/1.6/mapview' +
+                '?app_id=' + AppID +
+                '&app_code=' + AppCode +
+                '&w=300' +
+                '&h=300' +
+                '&c=' + this.state.place +
+                '&z=16'} />
+          </div>
         </Container>
       </Page>
     );

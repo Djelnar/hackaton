@@ -4,6 +4,7 @@ import { Page, Container } from './';
 import { Heading, Text, Link, Tabs, Tab } from 'rebass';
 import axios from 'axios'
 import QRCode from 'qrcode.react'
+import { AppID, AppCode } from './create';
 
 
 const DescCont = styled.div`
@@ -208,6 +209,57 @@ export class SmallPage extends Component {
               </Fragment>
             )
           }
+          {
+            tab === 'partc' && (
+              <Fragment>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia',
+                    width: '100%'
+                  }}
+                >
+                  <Text
+                    color='#fff'
+                    fontSize={4}
+                    textAlign='left'
+                  >Sheldur</Text></div>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia',
+                    width: '100%'
+                  }}
+                >
+                  <Text
+                    color='#fff'
+                    fontSize={4}
+                    textAlign='left'
+                  >Bohdan</Text></div>
+              </Fragment>
+            )
+          }
+          <div id='mapContainer' style={{
+            display: tab === 'map' ? 'block' : 'none',
+            height: 300,
+            width: 300,
+            backgroundColor: '#ffffff',
+            marginTop: 24
+          }}>
+            <img style={{
+              display: 'block',
+              width: '100%'
+            }}
+              src={'https://image.maps.cit.api.here.com/mia/1.6/mapview' +
+                '?app_id=' + AppID +
+                '&app_code=' + AppCode +
+                '&w=300' +
+                '&h=300' +
+                '&c=' + this.state.place +
+                '&z=16'} />
+          </div>
         </Container>
       </Page>
     );
