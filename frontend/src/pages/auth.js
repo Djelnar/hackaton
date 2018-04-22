@@ -35,6 +35,14 @@ const SSelect = Select.extend`
   max-width: 30px;
   background-color: #fff;
   flex: 0 0 auto;
+  border: 2px solid transparent;
+  &:focus {
+    box-shadow: none;
+  }
+  &:active {
+    box-shadow: none;
+    border: 2px solid fuchsia;
+  }
 `
 
 const Input = styled.input`

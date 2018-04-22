@@ -37,7 +37,7 @@ const InputWrap = styled.div`
   border-radius: 4px;
   width: 100%;
   will-change: transform;
-  transition: all .2s ease-in;
+  transition: transform .1s ease-in, width .1s ease-in;
   margin-bottom: 16px;
   box-shadow: 1px 1px 11px 0px rgba(127,127,127,0.75);
 
@@ -65,10 +65,11 @@ const InputWrap = styled.div`
 
   ${(p) => p.transform !== 0 && css`
     transform: translateY(-${p.transform}px);
-    transition: all .2s ease-out;
+    transition: transform .1s ease-out, width .1s ease-out;
     width: 100vw;
     border-radius: 0;
     box-shadow: none;
+    margin-bottom: 4px;
 
     & input {
       padding: 14px 8px;
@@ -165,7 +166,7 @@ class BigRaw extends Component {
   }
 
   componentDidMount() {
-    axios('http://localhost:3010/crowdEvents')
+    axios(`http://${window.location.hostname}:3010/crowdEvents`)
       .then(({data}) => {
         this.setState({
           allEvents: data,
@@ -195,7 +196,7 @@ class BigRaw extends Component {
         events: this.state.allEvents
       })  
     }
-    let events = this.state.allEvents.filter((event) => event.eventName.toLowerCase().includes(e.target.value.toLowerCase()))
+    let events = this.state.allEvents.filter((event) => event.eventName.toLowerCase().startsWith(e.target.value.toLowerCase()))
     this.setState({
       events
     })
@@ -208,9 +209,7 @@ class BigRaw extends Component {
     return (
       <Page>
         <Container>
-          {!events.length && (
-            <SHeading>Search an event</SHeading>
-          )}
+          <SHeading>Search an event</SHeading>
           <InputWrap
             transform={transform}
           >
@@ -225,21 +224,21 @@ class BigRaw extends Component {
             >tap to see the results</div>
           </InputWrap>
           {
-            events.length && events.map(({ eventName, link, type, date, participants, id }) => (
+            events.length ? events.map(({ eventName, link, type, date, participants, id }) => (
               <EventCard
                 key={id}
               >
                 <EventName
                   href={link}
                 >{eventName}</EventName>
-                <EventDate>{date}</EventDate>
+                <EventDate>{new Intl.DateTimeFormat('ru').format(date)}</EventDate>
                 {/* <EventParticipants>{participants.length} participants</EventParticipants> */}
                 <EventType>{type}</EventType>
                 <EventClick
                   onClick={() => history.push('/bigevent/' + id)}
                 >Details</EventClick>
               </EventCard>
-            ))
+            )) : null
           }
         </Container>
       </Page>

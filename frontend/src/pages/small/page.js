@@ -24,7 +24,7 @@ const Img = styled.div`
   }
 `
 
-export class BigPage extends Component {
+export class SmallPage extends Component {
   state = {
     tab: 'desc',
   }
@@ -35,7 +35,7 @@ export class BigPage extends Component {
     })
   }
   componentDidMount = () => {
-    axios(`http://${window.location.hostname}:3010/crowdEvents/${this.props.id}`)
+    axios(`http://${window.location.hostname}:3010/localEvents/${this.props.id}`)
       .then(({data}) => {
         let {eventName,
           description,
@@ -79,7 +79,7 @@ export class BigPage extends Component {
               <Heading fontSize={3}>{eventName}</Heading>
               <Text
                 mt={10}
-              >{new Intl.DateTimeFormat('ru').format(date)}</Text>
+              >{/* new Intl.DateTimeFormat('ru').format(date) */}</Text>
             </div>
           </DescCont>
           <Tabs
