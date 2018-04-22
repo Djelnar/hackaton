@@ -73,7 +73,7 @@ class CreateSmallRaw extends Component {
         '&query=' + e.target.value.trim())
       .then(({ data }) => {
         this.setState({
-          suggestions: data.suggestions
+          suggestions: data.suggestions || []
         })
       })
   }
@@ -100,8 +100,18 @@ class CreateSmallRaw extends Component {
             </InputWrap>
             {
               place !== 'Place' && (
-                <InputWrap>
-                  <div>Create</div>
+                <InputWrap
+                  style={{
+                    backgroundColor: 'fuchsia'
+                  }}
+                >
+                  <div
+                    style={{
+                      color: '#fff',
+                      textAlign: 'center',
+                      userSelect: 'none'
+                    }}
+                  >Create</div>
                 </InputWrap>
               )
             }
