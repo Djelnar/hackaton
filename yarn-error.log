@@ -1,0 +1,32 @@
+Arguments: 
+  /home/djelnar/.nvm/versions/node/v9.11.1/bin/node /home/djelnar/.nvm/versions/node/v9.11.1/bin/yarn build
+
+PATH: 
+  /home/djelnar/.nvm/versions/node/v9.11.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  9.11.1
+
+Platform: 
+  linux x64
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Couldn't find a package.json file in "/home/djelnar/hackaton"
+      at new MessageError (/home/djelnar/.nvm/versions/node/v9.11.1/lib/node_modules/yarn/lib/cli.js:186:110)
+      at /home/djelnar/.nvm/versions/node/v9.11.1/lib/node_modules/yarn/lib/cli.js:40048:15
+      at Generator.next (<anonymous>)
+      at step (/home/djelnar/.nvm/versions/node/v9.11.1/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /home/djelnar/.nvm/versions/node/v9.11.1/lib/node_modules/yarn/lib/cli.js:109:13
+      at <anonymous>
