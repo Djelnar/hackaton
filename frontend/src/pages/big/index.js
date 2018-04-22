@@ -196,7 +196,7 @@ class BigRaw extends Component {
         events: this.state.allEvents
       })  
     }
-    let events = this.state.allEvents.filter((event) => event.eventName.toLowerCase().startsWith(e.target.value.toLowerCase()))
+    let events = this.state.allEvents.filter((event) => event.eventName.toLowerCase().includes(e.target.value.toLowerCase()))
     this.setState({
       events
     })

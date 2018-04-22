@@ -210,7 +210,7 @@ class SmallRaw extends Component {
         events: this.state.allEvents
       })
     }
-    let events = this.state.allEvents.filter((event) => event.eventName.toLowerCase().startsWith(e.target.value.toLowerCase()))
+    let events = this.state.allEvents.filter((event) => event.eventName.toLowerCase().includes(e.target.value.toLowerCase()))
     this.setState({
       events
     })
@@ -250,7 +250,7 @@ class SmallRaw extends Component {
                 <EventType>{type}</EventType>
                 <EventClick
                   onClick={() => history.push('/smallevent/' + id)}
-                >Join</EventClick>
+                >Details</EventClick>
               </EventCard>
             )) : (
                 <Fragment>

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Page, Container } from './';
 import { Heading, Text, Link, Tabs, Tab } from 'rebass';
 import axios from 'axios'
+import QRCode from 'qrcode.react'
 
 
 const DescCont = styled.div`
@@ -36,14 +37,14 @@ export class SmallPage extends Component {
   }
   componentDidMount = () => {
     axios(`http://${window.location.hostname}:3010/localEvents/${this.props.id}`)
-      .then(({data}) => {
-        let {eventName,
+      .then(({ data }) => {
+        let { eventName,
           description,
           image,
           link,
           date,
           place,
-          type} = data
+          type } = data
         this.setState({
           eventName,
           description,
@@ -92,6 +93,9 @@ export class SmallPage extends Component {
             <Tab borderColor={tab === 'desc' ? 'fuchsia' : 'transparent'} onClick={this.setTab('desc')}>
               Description
             </Tab>
+            <Tab borderColor={tab === 'share' ? 'fuchsia' : 'transparent'} onClick={this.setTab('share')}>
+              Share
+            </Tab>
             <Tab borderColor={tab === 'partc' ? 'fuchsia' : 'transparent'} onClick={this.setTab('partc')}>
               Participants
             </Tab>
@@ -122,12 +126,85 @@ export class SmallPage extends Component {
                     href={link}
                   >Event link</Link>
                 </Text>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia',
+                    display: 'block',
+                    width: '100%'
+                  }}
+                >
+                  <Text
+                    color='#fff'
+                    fontSize={4}
+                    textAlign='center'
+                    style={{
+                      display: 'block',
+                      width: '100%'
+                    }}
+                  >Join</Text></div>
                 {/* <Text
                   style={{
                     width: '100%'
                   }}
                   mt={8}
                 >Type: {type}</Text> */}
+              </Fragment>
+            )
+          }
+          {
+            tab === 'share' && (
+              <Fragment>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia'
+                  }}
+                >
+                  <QRCode
+                    value={window.location.toString()}
+                    size={160}
+                  />
+                </div>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia'
+                  }}
+                >
+                  <Text
+                    color='#fff'
+                    fontSize={4}
+                    textAlign='center'
+                  >app.com{window.location.pathname}</Text>
+                </div>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia'
+                  }}
+                >
+                  <Text
+                    color='#fff'
+                    fontSize={4}
+                    textAlign='center'
+                  >Share</Text></div>
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 8,
+                    backgroundColor: 'fuchsia'
+                  }}
+                >
+                  <Text
+                    color='#fff'
+                    fontSize={4}
+                    textAlign='center'
+                  >Print</Text></div>
               </Fragment>
             )
           }
