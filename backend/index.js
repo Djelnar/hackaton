@@ -17,7 +17,7 @@ wss.on('connection', function connection(ws) {
   ws.send(JSON.stringify({type: 'handshake', sockId: ws.id}));
 
   ws.on('close', function () {
-    delete connections[ws.id];
+    delete connectedUsers[ws.id];
     delete ws.id;
   });
   
@@ -27,10 +27,16 @@ wss.on('connection', function connection(ws) {
     switch(messageData.type){
       case 'handshake':
         // connectedUsers[messageData.sockId].dbId = messageData.userId
-        connectedDbUsers[messageData.userId] = messageData.sockId
+        connectedDbUsers[messageData.userId] = connectedUsers[messageData.sockId]
         break
-      case 'invite': 
-        connectedDbUsers[messageData.recipientId].send(JSON.stringify({from: messageData.userName}))
+      case 'invite':
+      // console.log(connectedDbUsers)
+        connectedDbUsers[messageData.recipientId].send(JSON.stringify({
+          type: 'invite',
+          from: messageData.userName,
+          fromGroupName: messageData.fromGroupName,
+          fromType: messageData.fromType
+        }))
         break
       default:
         console.log(messageData)

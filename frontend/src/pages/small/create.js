@@ -60,6 +60,9 @@ const Closer = styled('span') `
 
 class CreateSmallRaw extends Component {
   state = {
+    eventName: '',
+    description: '',
+    link: '',
     suggestions: [],
     selectPlace: false,
     place: 'Place',
@@ -78,22 +81,58 @@ class CreateSmallRaw extends Component {
       })
   }
 
+  inputHandler = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
+  joinEvent = (createdId) => {
+    Axios.patch(`http://${window.location.hostname}:3010/localEvents/${createdId}`, {
+      participants: [
+        +localStorage.getItem('userId'),
+      ]
+    }).then(({data})=> {
+      this.props.history.push('/smallevent/' + data.id)
+      // console.log(data)
+    }).catch((e) => console.log(e))
+  }
+
+  createNewGroup = () => {
+    // console.log(this.state.place)
+    let {eventName,
+      description,
+      link,
+      place} = this.state
+    Axios.post(`http://${window.location.hostname}:3010/localEvents`, {
+      createdBy: +localStorage.getItem('userId'),
+      eventName,
+      description,
+      link,
+      place
+    }).then(({data})=> {
+      this.joinEvent(data.id)
+    }).catch((e) => console.log(e))
+  }
+
   render() {
-    const { suggestions, selectPlace, place } = this.state
+    const { suggestions, selectPlace, place, eventName,
+      description,
+      link } = this.state
 
     return (
       <Fragment>
         <Page>
           <Container>
-            <SHeading>Create</SHeading>
+            <SHeading>Create new group</SHeading>
             <InputWrap>
-              <input placeholder='Name' type='text' />
+              <input onChange={this.inputHandler} value={eventName} name="eventName" placeholder='Group name' type='text' />
             </InputWrap>
             <InputWrap>
-              <input placeholder='Description' type='text' />
+              <input onChange={this.inputHandler} value={description} name="description" placeholder='Description' type='text' />
             </InputWrap>
             <InputWrap>
-              <input placeholder='Link' type='text' />
+              <input onChange={this.inputHandler} value={link} name="link" placeholder='Link' type='text' />
             </InputWrap>
             <InputWrap>
               <div children={place} onClick={() => this.setState({ selectPlace: true })} />
@@ -111,6 +150,7 @@ class CreateSmallRaw extends Component {
                       textAlign: 'center',
                       userSelect: 'none'
                     }}
+                    onClick={this.createNewGroup}
                   >Create</div>
                 </InputWrap>
               )

@@ -14,9 +14,25 @@ const DescCont = styled.div`
   align-items: flex-start;
 `
 
+const Push = styled.div`
+  text-align: center;
+  position: fixed;
+  top: ${(props) => props.show ? '10px' : '-50px' };
+  transition: max-height 1s ease-out 0.5s;
+  left: 5%;
+  width: 90%;
+  /* color:  */
+  background: #AEE8CC;
+  max-height: ${(props) => props.show ? 'auto' : '0' };
+  padding: 20px 10px;
+  border-radius: 4px;
+box-shadow: 1px 1px 11px 0px rgba(127,127,127,0.75);
+`
+
 const Img = styled.div`
-  flex: 0 0 80px;
-  height: 80px;
+margin-top: 8px;
+  flex: 0 0 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   background-color: fuchsia;
@@ -25,6 +41,32 @@ const Img = styled.div`
     display: block;
     width: 100%;
   }
+`
+
+const Button = styled.div`
+border-radius: 4px;
+box-shadow: 1px 1px 11px 0px rgba(127,127,127,0.75);
+text-align: center;
+padding: 9px 0;
+margin-top: 10px;
+/* height: 20px; */
+width: 100%;
+  background: fuchsia;
+  font-weight: 500;
+`
+
+const Choose = styled.div`
+padding: 10px 0 0 0;
+  width: 100%;
+`
+
+const ChooseBtn = styled.div`
+  background: ${((props) => props.accept ? '#DDE8B9' : '#CB8589')};
+  width: 50%;
+  display: inline-block;
+  padding: 8px;
+  border-radius: 4px;
+box-shadow: 1px 1px 11px 0px rgba(127,127,127,0.75);
 `
 
 export class BigPage extends Component {
@@ -36,10 +78,11 @@ export class BigPage extends Component {
   setTab = (tab) => () => {
     this.setState({
       tab,
+      displayPush: false
     })
   }
   componentDidMount = () => {
-    this.socket = new WebSocket("ws://localhost:3020")
+    this.socket = new WebSocket(`ws://${window.location.hostname}:3020`)
     this.socket.onopen = () => {
       console.log("connected");
     };
@@ -54,8 +97,14 @@ export class BigPage extends Component {
           }))
           break
         case 'invite':
+        let {from,
+          fromGroupName,
+          fromType} = messageData 
           this.setState({
-            pushFrom: messageData.from
+            push: {from,
+              fromGroupName,
+              fromType},
+            displayPush: true
           })
           break
         default:
@@ -107,9 +156,29 @@ export class BigPage extends Component {
   contactAnotherUser = (id) => {
     
     this.socket.send(JSON.stringify({
+      type: 'invite',
+      fromGroupName: this.state.eventName,
+      fromType: 'event',
       userName: localStorage.getItem('userName'),
       recipientId: id
     }))
+  }
+
+  joinEvent = () => {
+    let participianIds = this.state.users.map((user) => user.id)
+    axios.patch(`http://${window.location.hostname}:3010/crowdEvents/${this.props.id}`, {
+      participants: [
+        +localStorage.getItem('userId'),
+        ...participianIds
+      ]
+    }).then(({data})=> {
+      console.log(data)
+    }).catch((e) => console.log(e))
+  }
+  closePush = () => {
+    this.setState({
+      displayPush: false
+    })
   }
 
   render() {
@@ -122,14 +191,30 @@ export class BigPage extends Component {
       place,
       type,
       users,
-    pushFrom } = this.state
+    push,
+  displayPush } = this.state
 
-      console.log('push!', pushFrom)
+      console.log('push!', push)
 
     const [lng, lat] = place.split(',')
 
     return (
       <Page>
+        {displayPush ? <Push show={this.state.displayPush}>
+          <span style={{fontWeight: 'bold'}}>
+{push.from}
+          </span> invites you to meet at <br/>
+          <span style={{fontWeight: 'bold'}}>{push.fromGroupName}</span> {push.fromType}!
+          <Choose  >
+            <ChooseBtn onClick={this.closePush} accept={true}>
+              Accept!
+            </ChooseBtn>
+            <ChooseBtn onClick={this.closePush} >
+              No, thanks...
+            </ChooseBtn>
+          </Choose>
+        </Push> : ''}
+        
         <Container>
           <DescCont>
             <Img>
@@ -140,7 +225,11 @@ export class BigPage extends Component {
               <Text
                 mt={10}
               >{new Intl.DateTimeFormat('ru').format(date)}</Text>
+            {
+              (users && users.length && !users.filter( user => +user.id === +localStorage.getItem('userId')).length ? <Button onClick={() => this.joinEvent()} >Join</Button> : '' )
+            }
             </div>
+            
           </DescCont>
           <Tabs
             style={{
@@ -196,9 +285,9 @@ export class BigPage extends Component {
               
               <Fragment>
                 {
-                  users.length ? users.map((userData, i) => (
-                    <User contact={this.contactAnotherUser} key={i} {...userData}/>
-                  )) : null
+                  users.length ? users.map((userData, i) => {
+                    return (userData.id !== +localStorage.getItem('userId')) ? <User contact={this.contactAnotherUser} key={i} {...userData}/> : ''
+                  }) : null
                 }
               </Fragment>
             )
@@ -222,9 +311,6 @@ export class BigPage extends Component {
                 '&c=' + this.state.place +
                 '&z=16'} />
           </div>
-            )
-          }
-
         </Container>
       </Page>
     );

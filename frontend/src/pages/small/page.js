@@ -5,7 +5,7 @@ import { Heading, Text, Link, Tabs, Tab } from 'rebass';
 import axios from 'axios'
 import QRCode from 'qrcode.react'
 import { AppID, AppCode } from './create';
-
+import User from '../User'
 
 const DescCont = styled.div`
   width: 100%;
@@ -14,8 +14,8 @@ const DescCont = styled.div`
 `
 
 const Img = styled.div`
-  flex: 0 0 80px;
-  height: 80px;
+  flex: 0 0 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   background-color: fuchsia;
@@ -45,7 +45,9 @@ export class SmallPage extends Component {
           link,
           date,
           place,
-          type } = data
+          type,
+        participants,
+      createdBy } = data
         this.setState({
           eventName,
           description,
@@ -53,8 +55,21 @@ export class SmallPage extends Component {
           link,
           date,
           place,
-          type
-        })
+          type,
+          participants,
+          createdBy
+        }, () => {
+          let promises = this.state.participants.map((userId) => axios(`http://${window.location.hostname}:3010/users/${userId}`))
+          Promise.all(promises)
+            .then((results) => {
+              let users = results.map(({data}) => data)
+              this.setState({
+                users
+              })
+            })
+            .catch((e) => console.log('partc err', e))
+          }
+        )
 
       })
       .catch((e) => console.log(e))
@@ -68,7 +83,9 @@ export class SmallPage extends Component {
       link,
       date,
       place,
-      type } = this.state
+      type,
+    users,
+    createdBy } = this.state
 
     return (
       <Page>
@@ -127,7 +144,9 @@ export class SmallPage extends Component {
                     href={link}
                   >Event link</Link>
                 </Text>
-                <div
+                
+                {
+                  (createdBy !== +localStorage.getItem('userId')) ? <div
                   style={{
                     marginTop: 16,
                     padding: 8,
@@ -144,7 +163,9 @@ export class SmallPage extends Component {
                       display: 'block',
                       width: '100%'
                     }}
-                  >Join</Text></div>
+                  >Join</Text></div> : ''
+                }
+                
                 {/* <Text
                   style={{
                     width: '100%'
@@ -212,32 +233,11 @@ export class SmallPage extends Component {
           {
             tab === 'partc' && (
               <Fragment>
-                <div
-                  style={{
-                    marginTop: 16,
-                    padding: 8,
-                    backgroundColor: 'fuchsia',
-                    width: '100%'
-                  }}
-                >
-                  <Text
-                    color='#fff'
-                    fontSize={4}
-                    textAlign='left'
-                  >Sheldur</Text></div>
-                <div
-                  style={{
-                    marginTop: 16,
-                    padding: 8,
-                    backgroundColor: 'fuchsia',
-                    width: '100%'
-                  }}
-                >
-                  <Text
-                    color='#fff'
-                    fontSize={4}
-                    textAlign='left'
-                  >Bohdan</Text></div>
+                {
+                  users.length ? users.map((userData, i) => {
+                    (userData.id !== +localStorage.getItem('userId')) ? <User contact={this.contactAnotherUser} key={i} {...userData}/> : ''
+                  }) : null
+                }
               </Fragment>
             )
           }

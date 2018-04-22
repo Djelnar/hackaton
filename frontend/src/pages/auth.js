@@ -130,7 +130,7 @@ class AuthRaw extends Component {
           </Horizontal>
           <Horizontal>
             <InputWrap>
-              <Input type="text" value={age} name="age" placeholder="age" onChange={this.inputHandler} />
+              <Input type="number" value={age} name="age" placeholder="age" onChange={this.inputHandler} />
             </InputWrap>
           </Horizontal>
           <Horizontal>

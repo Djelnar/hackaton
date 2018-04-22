@@ -144,12 +144,12 @@ class BigRaw extends Component {
     return (
       <Page>
         <Container>
-          <SHeading>Search an event</SHeading>
+          <SHeading>Search:</SHeading>
           <InputWrap
             transform={transform}
           >
             <input
-              placeholder='Search an event'
+              placeholder='Search'
               onFocus={this.focusHandler}
               onBlur={this.blurHandler}
               onChange={this.inputHandler}

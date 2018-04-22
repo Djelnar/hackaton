@@ -39,17 +39,17 @@ const SelectSizeRaw = ({ history }) => (
   <Page>
     <Container>
       <SHeading>
-        Select size
+        Select type of a crowd
       </SHeading>
       <LinkHeading
         onClick={() => history.push('/big-form')}
       >
-        Big
+        Large events
       </LinkHeading>
       <LinkHeading
         onClick={() => history.push('/small-form')}
       >
-        Small
+        Small meetings/groups
       </LinkHeading>
     </Container>
   </Page>

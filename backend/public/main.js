@@ -1,4 +1,4 @@
-var socket = new WebSocket("ws://localhost:3010");
+var socket = new WebSocket(`ws://${window.location.hostname}:3010`);
 socket.onopen = function() {
   console.log("connected");
 };
@@ -21,7 +21,7 @@ socket.onerror = function(error) {
 };
 
 fetch({
-  url: "localhost:3000/users",
+  url: `${window.location.hostname}:3000/users`,
   method: 'post',
   body: JSON.stringify({
     name: '8934293423',

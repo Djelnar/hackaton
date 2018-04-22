@@ -232,12 +232,12 @@ class SmallRaw extends Component {
               onClick={() => history.push('/smalleventcreate')}
             >Create</Button>
           </Fragment>
-          <SHeading>Search an event</SHeading>
+          <SHeading>Search:</SHeading>
           <InputWrap
             transform={transform}
           >
             <input
-              placeholder='Search an event'
+              placeholder='Search an group'
               onFocus={this.focusHandler}
               onBlur={this.blurHandler}
               onChange={this.inputHandler}
