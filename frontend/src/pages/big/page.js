@@ -30,6 +30,7 @@ const Img = styled.div`
 export class BigPage extends Component {
   state = {
     tab: 'desc',
+    place: ''
   }
 
   setTab = (tab) => () => {
@@ -96,11 +97,8 @@ export class BigPage extends Component {
             })
             .catch((e) => console.log('partc err', e))
         })
-<<<<<<< Updated upstream
-=======
         
 
->>>>>>> Stashed changes
       })
       .catch((e) => console.log(e))
 
@@ -121,17 +119,12 @@ export class BigPage extends Component {
       description,
       link,
       date,
-<<<<<<< Updated upstream
-      place = '',
-      type } = this.state
-=======
       place,
       type,
       users,
     pushFrom } = this.state
 
       console.log('push!', pushFrom)
->>>>>>> Stashed changes
 
     const [lng, lat] = place.split(',')
 
@@ -200,34 +193,13 @@ export class BigPage extends Component {
           }
           {
             tab === 'partc' && (
+              
               <Fragment>
-<<<<<<< Updated upstream
-                <div
-                  style={{
-                    marginTop: 16,
-                    padding: 8,
-                    backgroundColor: 'fuchsia',
-                    width: '100%'
-                  }}
-                >
-                  <Text
-                    color='#fff'
-                    fontSize={4}
-                    textAlign='left'
-                  >Sheldur</Text></div>
-                <div
-                  style={{
-                    marginTop: 16,
-                    padding: 8,
-                    backgroundColor: 'fuchsia',
-                    width: '100%'
-                  }}
-                >
-                  <Text
-                    color='#fff'
-                    fontSize={4}
-                    textAlign='left'
-                  >Bohdan</Text></div>
+                {
+                  users.length ? users.map((userData, i) => (
+                    <User contact={this.contactAnotherUser} key={i} {...userData}/>
+                  )) : null
+                }
               </Fragment>
             )
           }
@@ -250,17 +222,9 @@ export class BigPage extends Component {
                 '&c=' + this.state.place +
                 '&z=16'} />
           </div>
-=======
-                {
-                  users.length ? users.map((userData, i) => (
-                    <User contact={this.contactAnotherUser} key={i} {...userData}/>
-                  )) : null
-                }
-              </Fragment>
             )
           }
 
->>>>>>> Stashed changes
         </Container>
       </Page>
     );
