@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { Page, Container } from './';
 import { Heading, Text, Link, Tabs, Tab } from 'rebass';
+import User from '../User'
+
 import axios from 'axios'
 import { AppID, AppCode } from '../small/create';
 
@@ -36,6 +38,34 @@ export class BigPage extends Component {
     })
   }
   componentDidMount = () => {
+    this.socket = new WebSocket("ws://localhost:3020")
+    this.socket.onopen = () => {
+      console.log("connected");
+    };
+    this.socket.onmessage = (event) => {
+      let messageData = JSON.parse(event.data)
+      switch(messageData.type){
+        case 'handshake':
+          this.socket.send(JSON.stringify({
+            type: 'handshake',
+            sockId: messageData.sockId,
+            userId: localStorage.getItem('userId')
+          }))
+          break
+        case 'invite':
+          this.setState({
+            pushFrom: messageData.from
+          })
+          break
+        default:
+          console.log(messageData)
+      }
+    };
+    this.socket.onerror = (error) => {
+      console.log("sock error ", error.message);
+    };
+    
+
     axios(`http://${window.location.hostname}:3010/crowdEvents/${this.props.id}`)
       .then(({ data }) => {
         let { eventName,
@@ -44,7 +74,8 @@ export class BigPage extends Component {
           link,
           date,
           place,
-          type } = data
+          type,
+        participants} = data
         this.setState({
           eventName,
           description,
@@ -52,11 +83,35 @@ export class BigPage extends Component {
           link,
           date,
           place,
-          type
+          type,
+          participants
+        }, () => {
+          let promises = this.state.participants.map((userId) => axios(`http://${window.location.hostname}:3010/users/${userId}`))
+          Promise.all(promises)
+            .then((results) => {
+              let users = results.map(({data}) => data)
+              this.setState({
+                users
+              })
+            })
+            .catch((e) => console.log('partc err', e))
         })
+<<<<<<< Updated upstream
+=======
+        
+
+>>>>>>> Stashed changes
       })
       .catch((e) => console.log(e))
 
+  }
+
+  contactAnotherUser = (id) => {
+    
+    this.socket.send(JSON.stringify({
+      userName: localStorage.getItem('userName'),
+      recipientId: id
+    }))
   }
 
   render() {
@@ -66,8 +121,17 @@ export class BigPage extends Component {
       description,
       link,
       date,
+<<<<<<< Updated upstream
       place = '',
       type } = this.state
+=======
+      place,
+      type,
+      users,
+    pushFrom } = this.state
+
+      console.log('push!', pushFrom)
+>>>>>>> Stashed changes
 
     const [lng, lat] = place.split(',')
 
@@ -137,6 +201,7 @@ export class BigPage extends Component {
           {
             tab === 'partc' && (
               <Fragment>
+<<<<<<< Updated upstream
                 <div
                   style={{
                     marginTop: 16,
@@ -185,6 +250,17 @@ export class BigPage extends Component {
                 '&c=' + this.state.place +
                 '&z=16'} />
           </div>
+=======
+                {
+                  users.length ? users.map((userData, i) => (
+                    <User contact={this.contactAnotherUser} key={i} {...userData}/>
+                  )) : null
+                }
+              </Fragment>
+            )
+          }
+
+>>>>>>> Stashed changes
         </Container>
       </Page>
     );

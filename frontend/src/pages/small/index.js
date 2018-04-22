@@ -223,6 +223,15 @@ class SmallRaw extends Component {
     return (
       <Page>
         <Container>
+          <SHeading>Create a new group</SHeading>
+          <Fragment>
+            <Button
+              style={{
+                zIndex: transform !== 0 ? '-1' : '999'
+              }}
+              onClick={() => history.push('/smalleventcreate')}
+            >Create</Button>
+          </Fragment>
           <SHeading>Search an event</SHeading>
           <InputWrap
             transform={transform}
@@ -258,12 +267,6 @@ class SmallRaw extends Component {
                     fontSize={1}
                     mb='8px'
                   >Nothing found</SHeading>
-                  <Button
-                    style={{
-                      zIndex: transform !== 0 ? '-1' : '999'
-                    }}
-                    onClick={() => history.push('/smalleventcreate')}
-                  >Create</Button>
                 </Fragment>
               )
           }

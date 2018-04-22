@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Select, Heading, Button } from 'rebass';
 import withRouter from 'react-router-dom/withRouter';
+import axios from 'axios'
 
 
 const Page = styled.div`
@@ -75,6 +76,10 @@ const InputWrap = styled.div`
 class AuthRaw extends Component {
   state = {
     phone: '',
+    name: '',
+    age: '',
+    gender: '',
+    tags: ''
   }
 
   changeNumber = (e) => {
@@ -86,16 +91,59 @@ class AuthRaw extends Component {
   }
 
   gotoForm = () => {
+    axios.post(`http://${window.location.hostname}:3010/users`, {
+      name: this.state.name,
+      age: this.state.age,
+      gender: this.state.gender,
+      tags: this.state.tags.split(' ')
+    }).then(({data}) => {
+      localStorage.setItem('userName', this.state.name)
+      localStorage.setItem('userId', data.id)
+    }).catch((e) => console.log('gotoform err', e))
+    // console.log({
+    //   name: this.state.name,
+    //   age: this.state.age,
+    //   gender: this.state.gender,
+    //   tags: this.state.tags.split(' ')
+    // })
     this.props.history.replace('/select-size')
   }
 
+  inputHandler = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
   render() {
-    const { phone } = this.state
+    const { phone, name, age, gender, tags } = this.state
 
     return (
       <Page>
         <Container>
-          <SHeading>Enter your number</SHeading>
+          <SHeading>Please fill the form</SHeading>
+
+          <Horizontal>
+            <InputWrap>
+              <Input type="text" value={name} name="name" placeholder="Name" onChange={this.inputHandler} />
+            </InputWrap>
+          </Horizontal>
+          <Horizontal>
+            <InputWrap>
+              <Input type="text" value={age} name="age" placeholder="age" onChange={this.inputHandler} />
+            </InputWrap>
+          </Horizontal>
+          <Horizontal>
+            <InputWrap>
+              <Input type="text" value={gender} name="gender" placeholder="gender" onChange={this.inputHandler} />
+            </InputWrap>
+          </Horizontal>
+          <Horizontal>
+            <InputWrap>
+              <Input type="text" value={tags} name="tags" placeholder="your interests" onChange={this.inputHandler} />
+            </InputWrap>
+          </Horizontal>
+
           <Horizontal>
             <SSelect>
               <option>+7</option>
